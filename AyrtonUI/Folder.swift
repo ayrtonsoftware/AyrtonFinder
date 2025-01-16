@@ -22,6 +22,7 @@ public class Folder: File {
         let fileManager = FileManager.default
         
         do {
+            files.removeAll()
             let fileURLs = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
             for url in fileURLs {
                 var isDirectory: ObjCBool = false

@@ -15,7 +15,7 @@ public class FinderVM: ObservableObject {
     @Published public var currentFile: File?
     @Published public var showHiddenFiles: Bool = false
     
-    public init(path: String = "/Users/mbergamo/test") {
+    public init(path: String = "/") {
         let rootURL = URL(fileURLWithPath: path)
         let rootFolder = Folder(url: rootURL)
         rootFolder.load()
@@ -23,11 +23,20 @@ public class FinderVM: ObservableObject {
         folders.append(rootFolder)
     }
 
+    func reload() {
+        let newFolder = Folder(url: currentFolder.url)
+        newFolder.load()
+        currentFolder = newFolder
+        folders.removeLast()
+        folders.append(newFolder)
+    }
+    
     func pop() {
         if folders.count > 1 {
             folders.removeLast()
             if let topFolder = folders.last {
                 currentFolder = topFolder
+                currentFolder.load()
             }
         }
     }
@@ -39,6 +48,7 @@ public class FinderVM: ObservableObject {
             folder.load()
             folders.append(folder)
             currentFolder = folder
+            currentFolder.load()
         }
     }
 }

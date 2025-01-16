@@ -18,10 +18,17 @@ public struct FinderView: View {
     public var body: some View {
         VStack {
             Text("Folders")
-            Button {
-                vm.pop()
-            } label: {
-                Text("Pop")
+            HStack {
+                Button {
+                    vm.pop()
+                } label: {
+                    Text("Pop")
+                }
+                Button {
+                    vm.reload()
+                } label: {
+                    Text("Reload")
+                }
             }
             Toggle("Hidden Files:", isOn: $vm.showHiddenFiles)
             ScrollView {
