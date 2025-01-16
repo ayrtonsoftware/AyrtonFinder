@@ -29,6 +29,7 @@ struct AyrtonFinderApp: SwiftUI.App {
         WindowGroup {
             NavigationSplitView {
                 FinderView(vm: fvm)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } detail: {
                 VStack {
                     Text(fvm.currentFolder.url.lastPathComponent)
@@ -37,6 +38,8 @@ struct AyrtonFinderApp: SwiftUI.App {
                     }
                     FileView(vm: fvm)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .border(.gray, width: 1)
                 .onAppear {
                     setup()
                 }

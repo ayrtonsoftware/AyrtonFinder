@@ -31,25 +31,33 @@ public struct FinderView: View {
                 }
             }
             Toggle("Hidden Files:", isOn: $vm.showHiddenFiles)
+                .onChange(of: vm.showHiddenFiles) { oldValue, newValue in
+                    vm.reload()
+                }
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) { // Important: Set spacing to 0
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(vm.currentFolder.files.indices, id: \.self) { index in // Use indices for alternating rows
                         let file = vm.currentFolder.files[index]
                         let isHiddenFile = file.url.lastPathComponent.starts(with: ".")
                         if (isHiddenFile && vm.showHiddenFiles) || !isHiddenFile {
-                            FileRow(file: vm.currentFolder.files[index],
-                                    isOdd: index % 2 != 0,
-                                    action: {
+                            FilenameView(path: file.url.path,
+                                         filename: file.url.lastPathComponent,
+                                         isSelected: false,
+                                         fileExtension: file.url.pathExtension,
+                                         isFolder: file.isFolder) {
+                                print("Selected: \(file.url.lastPathComponent)")
                                 if file.isFolder {
                                     vm.push(file: file)
                                 } else {
                                     vm.currentFile = file
                                 }
-                            })
+                            }
+                            .background(index.isMultiple(of: 2) ? Color.secondary.opacity(0.1) : Color.clear) // Alternating background
                         }
                     }
                 }
             }
         }
+        .border(.gray, width: 1)
     }
 }

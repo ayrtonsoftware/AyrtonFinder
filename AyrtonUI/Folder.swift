@@ -15,10 +15,8 @@ public class Folder: File {
     override public var isFolder: Bool {
         return true
     }
-    override var icon: Image {
-        return Image(systemName: "folder")
-    }
-    public func load() {
+    
+    public func load(addHiddenFiles: Bool) {
         let fileManager = FileManager.default
         
         do {
@@ -28,10 +26,14 @@ public class Folder: File {
                 var isDirectory: ObjCBool = false
                 if fileManager.fileExists(atPath: url.path,
                                           isDirectory: &isDirectory) {
-                    if isDirectory.boolValue {
-                        files.append(Folder(url: url))
-                    } else {
-                        files.append(File(url: url))
+                    let isHidden = File.isHiddenFile(atPath: url.path)
+                    print("Is file hidden: \(url.path) --- \(isHidden)")
+                    if !isHidden || (isHidden && addHiddenFiles) {
+                        if isDirectory.boolValue {
+                            files.append(Folder(url: url))
+                        } else {
+                            files.append(File(url: url))
+                        }
                     }
                 }
             }

@@ -93,6 +93,7 @@ public struct FileView: View {
         VStack {
             contentView
         }
+        .border(Color.gray, width: 1)
         .onChange(of: vm.currentFile) { newValue in
             getContentView(file: vm.currentFile)
         }
